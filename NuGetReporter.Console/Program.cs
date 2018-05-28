@@ -33,7 +33,7 @@ namespace NuGetReporter.Console
             var reader = factory.Create(ConfigType.CsProj);
 
 //            var packages = reader
-//                .Read(@"D:\Development\Programming\Git Repos\leaguestats\LeagueStats.Core\packages.config").ToList();
+//                .Read(@"<PackagesConfig>").ToList();
             var packages = reader
                 .Read(@"D:\Development\Programming\Projects\NuGetReporter\NuGetReporter.Cmdlet\NuGetReporter.Cmdlet.csproj")
                 .ToList();
