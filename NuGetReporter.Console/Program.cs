@@ -15,7 +15,7 @@ namespace NuGetReporter.Console
 
         private static void NewMethod1()
         {
-            var settings = Settings.LoadDefaultSettings(@"D:\Development\Programming\HDE\COLA\COLA");
+            var settings = Settings.LoadDefaultSettings(@"<RootDir>");
 
             var sourceProvider = new PackageSourceProvider(settings);
             var sources = sourceProvider.LoadPackageSources();
