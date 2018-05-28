@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetReporter.Console", "NuGetReporter.Console\NuGetReporter.Console.csproj", "{DBE69992-7B8B-404F-A71A-1BE96B43A732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetReporter.Cmdlet", "NuGetReporter.Cmdlet\NuGetReporter.Cmdlet.csproj", "{CEB98BE4-86B4-4AA9-8656-F553089101EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBE69992-7B8B-404F-A71A-1BE96B43A732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBE69992-7B8B-404F-A71A-1BE96B43A732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBE69992-7B8B-404F-A71A-1BE96B43A732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBE69992-7B8B-404F-A71A-1BE96B43A732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB98BE4-86B4-4AA9-8656-F553089101EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB98BE4-86B4-4AA9-8656-F553089101EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB98BE4-86B4-4AA9-8656-F553089101EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB98BE4-86B4-4AA9-8656-F553089101EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

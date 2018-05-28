@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="morelinq" Version="2.10.0" />
+    <PackageReference Include="NuGet.Commands" Version="4.2.0" />
+    <PackageReference Include="NuGet.Configuration" Version="4.2.0" />
+    <PackageReference Include="NuGet.Repositories" Version="4.2.0" />
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0-preview-03" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PowerShell" />
+  </ItemGroup>
+</Project>
