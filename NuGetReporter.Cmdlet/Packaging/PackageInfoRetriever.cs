@@ -68,12 +68,29 @@ namespace NuGetReporter.Cmdlet.Packaging
         {
             var sources = new HashSet<string>();
 
-            return _packageSources
-                .Select(source => Repository.Factory.GetCoreV3(source.Source))
-                .Select(packageSource => packageSource.GetResource<ListResource>())
-                .Where(resource => resource != null)
-                .Where(resource => sources.Add(resource.Source))
-                .ToList();
+            var sourceFeeds = new List<ListResource>();
+            foreach (var source in _packageSources)
+            {
+                var packageSource = Repository.Factory.GetCoreV3(source.Source);
+                ListResource resource = null;
+                
+                try
+                {
+                    resource = packageSource.GetResource<ListResource>();
+                }
+                catch (Exception e)
+                {
+                    // TODO: Log? Output?
+                    Console.WriteLine(e);
+                }
+                if (resource == null) 
+                    continue;
+                
+                if (sources.Add(resource.Source))
+                    sourceFeeds.Add(resource);
+            }
+
+            return sourceFeeds;
         }
     }
 }

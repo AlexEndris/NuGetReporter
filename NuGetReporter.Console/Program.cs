@@ -10,9 +10,18 @@ namespace NuGetReporter.Console
     {
         static void Main(string[] args)
         {
-            var packageSource = new PackageSource("https://api.nuget.org/v3/index.json", "nuget.org");
+            NewMethod1();
+        }
 
-            var retriever = new PackageInfoRetriever(new[] {packageSource});
+        private static void NewMethod1()
+        {
+            var settings = Settings.LoadDefaultSettings(@"D:\Development\Programming\HDE\COLA\COLA");
+
+            var sourceProvider = new PackageSourceProvider(settings);
+            var sources = sourceProvider.LoadPackageSources();
+
+
+            var retriever = new PackageInfoRetriever(sources);
 
             var package = retriever.GetNewest("NuGet.Client", true);
         }
