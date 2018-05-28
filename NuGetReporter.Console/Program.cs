@@ -6,8 +6,6 @@ using NuGetReporter.Cmdlet.Packaging;
 
 namespace NuGetReporter.Console
 {
-    using System;
-
     class Program
     {
         static void Main(string[] args)
