@@ -6,5 +6,6 @@ namespace NuGetReporter.Cmdlet
     {
         public string Id { get; set; }
         public string Version { get; set; }
+        public string NewestVersion { get; set; }
     }
 }

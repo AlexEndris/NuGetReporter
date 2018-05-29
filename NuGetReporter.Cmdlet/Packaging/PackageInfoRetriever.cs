@@ -11,87 +11,77 @@ using NuGet.Repositories;
 
 namespace NuGetReporter.Cmdlet.Packaging
 {
-    public sealed class PackageInfoRetriever
-    {
-        private readonly IEnumerable<PackageSource> _packageSources;
+	public sealed class PackageInfoRetriever
+	{
+		private readonly IEnumerable<ListResource> _feeds;
 
-        public PackageInfoRetriever(IEnumerable<PackageSource> packageSources)
-        {
-            _packageSources = packageSources;
-        }
-        
-        public Package GetNewest(string id, bool allowPrerelease)
-        {
-            var feeds = GetSourceFeeds();
-            var logger = NullLogger.Instance;
+		private readonly IDictionary<string, IPackageSearchMetadata> _cache =
+			new Dictionary<string, IPackageSearchMetadata>();
 
-            var allPackages = new List<IPackageSearchMetadata>();
-            
-            foreach (var feed in feeds)
-            {
-                var packagesAsync = feed.ListAsync(id, allowPrerelease, false, false, logger, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+		public PackageInfoRetriever(IEnumerable<ListResource> feeds)
+		{
+			_feeds = feeds;
+		}
 
-                var packages = ConvertToEnumerable(packagesAsync)
-                    .Where(x => string.Equals(x.Identity.Id, id, StringComparison.InvariantCulture))
-                    .ToList();
-                
-                allPackages.AddRange(packages);
-            }
+		public Package GetNewest(Package package, bool allowPrerelease)
+		{
+			// TODO: Maybe log?
+			var logger = NullLogger.Instance;
 
-            var newestPackage = allPackages.MaxBy(x => x.Identity.Version);
-            
-            return new Package
-            {
-                Id = newestPackage.Identity.Id,
-                Version = newestPackage.Identity.Version.ToNormalizedString()
-            };
-        }
+			if (!_cache.TryGetValue(package.Id, out var newestPackage))
+			{
+				newestPackage = GetPackageDataFromFeeds(package, allowPrerelease, logger);
 
-        private static IEnumerable<IPackageSearchMetadata> ConvertToEnumerable(IEnumerableAsync<IPackageSearchMetadata> packagesAsync)
-        {
-            var enumeratorAsync = packagesAsync.GetEnumeratorAsync();
+				if (newestPackage == null)
+					return package;
+				
+				_cache.Add(package.Id, newestPackage);
+			}
 
-            var packages = new List<IPackageSearchMetadata>();
-            
-            if (enumeratorAsync == null)
-                return Enumerable.Empty<IPackageSearchMetadata>();
-            
-            while (enumeratorAsync.MoveNextAsync().ConfigureAwait(false).GetAwaiter().GetResult())
-            {
-                packages.Add(enumeratorAsync.Current);
-            }
+			package.NewestVersion = newestPackage.Identity.Version.ToNormalizedString();
 
-            return packages;
-        }
+			return package;
+		}
 
-        private IEnumerable<ListResource> GetSourceFeeds()
-        {
-            var sources = new HashSet<string>();
+		private IPackageSearchMetadata GetPackageDataFromFeeds(Package package, bool allowPrerelease, ILogger logger)
+		{
+			var allPackages = new List<IPackageSearchMetadata>();
 
-            var sourceFeeds = new List<ListResource>();
-            foreach (var source in _packageSources)
-            {
-                var packageSource = Repository.Factory.GetCoreV3(source.Source);
-                packageSource.PackageSource.Credentials = source.Credentials;
-                ListResource resource = null;
-                
-                try
-                {
-                    resource = packageSource.GetResource<ListResource>();
-                }
-                catch (Exception e)
-                {
-                    // TODO: Log? Output?
-                    Console.WriteLine(e);
-                }
-                if (resource == null) 
-                    continue;
-                
-                if (sources.Add(resource.Source))
-                    sourceFeeds.Add(resource);
-            }
+			foreach (var feed in _feeds)
+			{
+				var packagesAsync = feed.ListAsync(package.Id, allowPrerelease, false, false, logger, CancellationToken.None)
+					.ConfigureAwait(false)
+					.GetAwaiter()
+					.GetResult();
 
-            return sourceFeeds;
-        }
-    }
+				var packages = ConvertToEnumerable(packagesAsync)
+					.Where(x => string.Equals(x.Identity.Id, package.Id, StringComparison.InvariantCulture))
+					.ToList();
+
+				allPackages.AddRange(packages);
+			}
+
+			return allPackages.Any()
+				? allPackages.MaxBy(x => x.Identity.Version)
+				: null;
+		}
+
+		private static IEnumerable<IPackageSearchMetadata> ConvertToEnumerable(
+			IEnumerableAsync<IPackageSearchMetadata> packagesAsync)
+		{
+			var enumeratorAsync = packagesAsync.GetEnumeratorAsync();
+
+			var packages = new List<IPackageSearchMetadata>();
+
+			if (enumeratorAsync == null)
+				return Enumerable.Empty<IPackageSearchMetadata>();
+
+			while (enumeratorAsync.MoveNextAsync().ConfigureAwait(false).GetAwaiter().GetResult())
+			{
+				packages.Add(enumeratorAsync.Current);
+			}
+
+			return packages;
+		}
+	}
 }
