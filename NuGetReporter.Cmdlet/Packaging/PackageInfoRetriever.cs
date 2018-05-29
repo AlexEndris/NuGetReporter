@@ -55,7 +55,7 @@ namespace NuGetReporter.Cmdlet.Packaging
 					.GetResult();
 
 				var packages = ConvertToEnumerable(packagesAsync)
-					.Where(x => string.Equals(x.Identity.Id, package.Id, StringComparison.InvariantCulture))
+					.Where(x => string.Equals(x.Identity.Id, package.Id, StringComparison.InvariantCultureIgnoreCase))
 					.ToList();
 
 				allPackages.AddRange(packages);
