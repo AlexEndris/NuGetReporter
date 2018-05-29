@@ -47,7 +47,7 @@ namespace NuGetReporter.Cmdlet.Packaging
             };
         }
 
-        private IEnumerable<IPackageSearchMetadata> ConvertToEnumerable(IEnumerableAsync<IPackageSearchMetadata> packagesAsync)
+        private static IEnumerable<IPackageSearchMetadata> ConvertToEnumerable(IEnumerableAsync<IPackageSearchMetadata> packagesAsync)
         {
             var enumeratorAsync = packagesAsync.GetEnumeratorAsync();
 

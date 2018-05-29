@@ -13,15 +13,15 @@ namespace NuGetReporter.Cmdlet.Config
 
             var xml = XElement.Parse(packageConfig);
 
-            var packageNodes = xml.DescendantsAndSelf("PackageReference");
+            var packageNodes = xml.DescendantsAndSelf(XmlConstants.PackageReference);
 
             return packageNodes.Select(Deserialize).Where(x => x != null);
         }
 
         private static Package Deserialize(XElement packageNode)
         {
-            string id = packageNode.Attribute("Include")?.Value;
-            string version = packageNode.Attribute("Version")?.Value;
+            string id = packageNode.Attribute(XmlConstants.IncludeAttribute)?.Value;
+            string version = packageNode.Attribute(XmlConstants.VersionAttributeCsProj)?.Value;
 
             if (id == null
                 || version == null)

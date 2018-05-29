@@ -9,7 +9,4 @@
     <PackageReference Include="NuGet.Repositories" Version="4.2.0" />
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.0-preview-03" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PowerShell" />
-  </ItemGroup>
 </Project>
