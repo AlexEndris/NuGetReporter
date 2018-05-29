@@ -42,7 +42,9 @@ namespace NuGetReporter.Cmdlet.PowerShell
 			{
 				// TODO: Use switch
 				infoRetriever.GetNewest(package, false);
-			}
+			} 
+			
+			// TODO: Output as json
 		}
 
 		private static IEnumerable<PackageSource> GetPackageSources(string directory)
@@ -52,7 +54,6 @@ namespace NuGetReporter.Cmdlet.PowerShell
 			var sourceProvider = new PackageSourceProvider(settings);
 			return sourceProvider.LoadPackageSources();
 		}
-
 
 		private static IDictionary<string, IEnumerable<Package>> GetPackages(string directory)
 		{
