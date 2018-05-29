@@ -19,11 +19,17 @@ namespace NuGetReporter.Console
 
             var sourceProvider = new PackageSourceProvider(settings);
             var sources = sourceProvider.LoadPackageSources();
+            var sourceFeedRetriever = new SourceFeedRetriever();
 
+            var retriever = new PackageInfoRetriever(sourceFeedRetriever.GetSourceFeeds(sources));
 
-            var retriever = new PackageInfoRetriever(sources);
-
-            var package = retriever.GetNewest("Hde.Data", true);
+            var package = new Package
+            {
+                Id = "Hde.Data",
+                Version = "6.1.0"
+            };
+            
+            package = retriever.GetNewest(package, false);
         }
 
         private static void NewMethod()

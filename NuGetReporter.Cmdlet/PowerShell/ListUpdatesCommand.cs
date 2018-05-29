@@ -33,7 +33,8 @@ namespace NuGetReporter.Cmdlet.PowerShell
 		private void AddNewestVersion(IDictionary<string, IEnumerable<Package>> packages)
 		{
 			var sources = GetPackageSources(RootFolder);
-			var feeds = GetSourceFeeds(sources);
+			var sourceFeedRetriever = new SourceFeedRetriever();
+			var feeds = sourceFeedRetriever.GetSourceFeeds(sources);
 
 			var infoRetriever = new PackageInfoRetriever(feeds);
 
@@ -52,35 +53,6 @@ namespace NuGetReporter.Cmdlet.PowerShell
 			return sourceProvider.LoadPackageSources();
 		}
 
-		private IEnumerable<ListResource> GetSourceFeeds(IEnumerable<PackageSource> packageSources)
-		{
-			var listResources = new HashSet<string>();
-
-			var sourceFeeds = new List<ListResource>();
-			foreach (var source in packageSources)
-			{
-				var packageSource = Repository.Factory.GetCoreV3(source.Source);
-				packageSource.PackageSource.Credentials = source.Credentials;
-				ListResource resource = null;
-                
-				try
-				{
-					resource = packageSource.GetResource<ListResource>();
-				}
-				catch (Exception e)
-				{
-					// TODO: Log? Output?
-					Console.WriteLine(e);
-				}
-				if (resource == null) 
-					continue;
-                
-				if (listResources.Add(resource.Source))
-					sourceFeeds.Add(resource);
-			}
-
-			return sourceFeeds;
-		}
 
 		private static IDictionary<string, IEnumerable<Package>> GetPackages(string directory)
 		{
