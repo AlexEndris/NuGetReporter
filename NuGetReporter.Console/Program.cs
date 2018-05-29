@@ -15,7 +15,7 @@ namespace NuGetReporter.Console
 
         private static void NewMethod1()
         {
-            var settings = Settings.LoadDefaultSettings(@"<RootDir>");
+            var settings = Settings.LoadDefaultSettings(@"C:\Programming\Git\HDE\COLA\");
 
             var sourceProvider = new PackageSourceProvider(settings);
             var sources = sourceProvider.LoadPackageSources();
@@ -23,7 +23,7 @@ namespace NuGetReporter.Console
 
             var retriever = new PackageInfoRetriever(sources);
 
-            var package = retriever.GetNewest("NuGet.Client", true);
+            var package = retriever.GetNewest("Hde.Data", true);
         }
 
         private static void NewMethod()

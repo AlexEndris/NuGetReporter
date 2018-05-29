@@ -72,6 +72,7 @@ namespace NuGetReporter.Cmdlet.Packaging
             foreach (var source in _packageSources)
             {
                 var packageSource = Repository.Factory.GetCoreV3(source.Source);
+                packageSource.PackageSource.Credentials = source.Credentials;
                 ListResource resource = null;
                 
                 try
